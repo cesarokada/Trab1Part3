@@ -1,25 +1,38 @@
 #include<GL/glut.h>
 #include<stdio.h>
 #include<math.h>
+
 int a,b,c,d,e,f,g,h,tx,ty;
+float angulo;
+
 void init(void)
 {
  glClearColor(0.0,0.0,0.0,1.0);
  glMatrixMode(GL_PROJECTION);
  gluOrtho2D(0.0,200.0,0.0,200.0);
 }
+
 void setpoint(GLint x,GLint y)
 {
- glBegin(GL_POINTS);
- glVertex2i(x,y);
- glEnd();
+    glBegin(GL_POINTS);
+    glVertex2i(x,y);
+    glEnd();
 }
+
 void transform(int x,int y,int tx,int ty)
 {
- glColor3f (0.0, 1.0, 0.0);
- setpoint(x+tx,y+ty);
- glColor3f (255.0, 255.0, 255.0);
+    glColor3f (0.0, 1.0, 0.0);
+    setpoint(x+tx,y+ty);
+    glColor3f (255.0, 255.0, 255.0);
 }
+
+void rotate(int x,int y,float angulo){
+    glColor3f (0.0, 1.0, 0.0);
+    glRotatef(angulo,0.0,0.0,1.0);
+    setpoint(x,y);
+    glColor3f (255.0, 255.0, 255.0);
+}
+
 int round1(double number)
 {
  return (number>=0) ? (int)(number+0.5):(int)(number-0.5);
@@ -42,15 +55,18 @@ void LineWithDDA(int x0,int y0,int x1,int y1)
  yinc=(float)dy/(float)steps;
  setpoint(round1(x),round1(y));
  transform(round1(x),round1(y),tx,ty);
+ //rotate(round1(x),round1(y),angulo);
  for(i=0;i<steps;i++)
  {
   x+=xinc;
   y+=yinc;
   setpoint(round1(x),round1(y));
   transform(round1(x),round1(y),tx,ty);
+  //rotate(round1(x),round1(y),angulo);
  }
  glutSwapBuffers();
 }
+
 void draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -74,6 +90,14 @@ void validaOpcao(int opcao){
             glutDisplayFunc(draw);
             glutMainLoop();
             break;
+        case 2:
+            printf("\nValor do angulo: ");
+            scanf("%f",&angulo);
+            glutCreateWindow("Rotacao Poligono");
+            init();
+            glutDisplayFunc(draw);
+            glutMainLoop();
+            break;
         case 0:
             break;
     }
@@ -84,7 +108,8 @@ void showMenu(){
     int op;
     system("cls");
     printf("--------------MENU--------------\n");
-    printf("1 - Translação\n");
+    printf("1 - Translacao\n");
+    printf("2 - Rotacao\n");
     printf("0 - Sair\n");
     printf("Opcao: ");
     scanf("%d",&op);
