@@ -43,3 +43,5 @@ Temporary Items
 .apdisk
 *.exe
 *.o
+*.o
+bin/Debug/Trab1Part3.exe

@@ -4,12 +4,8 @@
 
 #define NUM_PONTOS 4
 
-typedef struct tPontos{
-  int x;
-  int y;
-} Pontos;
-
-Pontos points[NUM_PONTOS];
+int pontos[3][NUM_PONTOS];
+int matrizN[3][4];
 
 void inicializaOpenGL()
 {
@@ -62,14 +58,43 @@ void draw()
     for(int i = 0; i < NUM_PONTOS; i++)
     {
       if((i + 1) == NUM_PONTOS)
-        DDA(points[i].x, points[i].y,
-            points[0].x, points[0].y);
+        DDA(matrizN[0][i], matrizN[1][i],
+            matrizN[0][0], matrizN[1][0]);
       else
-        DDA(points[i].x, points[i].y,
-            points[i + 1].x, points[i + 1].y);
+        DDA(matrizN[0][i], matrizN[1][i],
+            matrizN[0][i + 1], matrizN[1][i + 1]);
     }
     glEnd();
     glFlush();
+}
+
+void matrizTranslacao(int tx, int ty)
+{
+  int matrizT[3][3], soma;
+
+  //monta matriz de translação
+  for(int i = 0; i < 3; i++)
+    for(int j = 0; i < 3; i++)
+    {
+      if(i == j)
+        matrizT[i][j] = 1;
+      else if((i == 0) && (j == 2))
+        matrizT[i][j] = tx;
+      else if((i == 1) && (j == 2))
+        matrizT[i][j] = ty;
+      else
+        matrizT[i][j] = 0;
+    }
+
+  //calcula matriz resultante
+  for(int i = 0; i < 3; i++)
+    for(int j = 0; j < 4; j++)
+    {
+      soma = 0;
+      for(int n = 0; i < 3; i++)
+       soma += matrizT[i][n] * pontos[n][j];
+      matrizN[i][j] = soma;
+    }
 }
 
 void translacao()
@@ -81,11 +106,7 @@ void translacao()
   printf("\nTranslacao em Y: ");
   scanf("%d",&ty);
 
-  for(int i = 0; i < NUM_PONTOS; i++)
-  {
-    points[i].x += tx;
-    points[i].y += ty;
-  }
+  matrizTranslacao(tx, ty);
   inicializaOpenGL();
   glutCreateWindow("Translacao Poligono");
   inicializaCores();
@@ -123,14 +144,9 @@ void showMenu()
 
 void definePontos()
 {
-  printf("VERTICES DO POLIGONO\n\n");
-  for(int i = 0; i < NUM_PONTOS; i++)
-  {
-    printf("X%d: ", i + 1);
-    scanf("%d", &points[i].x);
-    printf("Y%d: ", i + 1);
-    scanf("%d", &points[i].y);
-  }
+  pontos[0][0] = 100; pontos[0][1] = 200; pontos[0][2] = 200; pontos[0][3] = 100;
+  pontos[1][0] = 100; pontos[1][1] = 100; pontos[1][2] = 200; pontos[1][3] = 200;
+  pontos[2][0] = 1;   pontos[2][1] = 1;   pontos[2][2] = 1;   pontos[2][3] = 1;
 }
 int main(int argc,char **argv)
 {
