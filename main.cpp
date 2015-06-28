@@ -87,13 +87,6 @@ void matrizTranslacao(int tx, int ty)
     matrizT[1][2] = ty;
     matrizT[0][1] = 0;
 
-    for(i = 0; i < 3; i++){
-        for(j = 0; j < 3; j++){
-            printf("%d    ",matrizT[i][j]);
-
-        }
-        printf("\n");
-    }
 
 
   //calcula matriz resultante
@@ -101,10 +94,8 @@ void matrizTranslacao(int tx, int ty)
     for(j = 0; j < 4; j++){
         for(k = 0; k < 3; k++){
             soma += matrizT[i][k]*pontos[k][j];
-            //printf("%d",soma);
         }
         matrizN[i][j] = soma;
-        printf("\n   %d  ",matrizN[i][j]);
         soma = 0;
     }
   }
