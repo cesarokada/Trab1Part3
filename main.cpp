@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<math.h>
 
+#define PI 3.14159265
 #define NUM_PONTOS 4
 
 int pontos[3][NUM_PONTOS];
@@ -101,6 +102,36 @@ void matrizTranslacao(int tx, int ty)
   }
 }
 
+void matrizRot(int angulo){
+    float matrizR[3][3];
+    float radianos, soma = 0.0;
+
+    radianos = (angulo * PI)/180;
+
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if ((i == j) && (i!=2))
+                matrizR[i][j] = cos(radianos);
+            else
+                matrizR[i][j] = 0;
+        }
+    }
+    matrizR[0][1] = -sin(radianos);
+    matrizR[1][0] = sin(radianos);
+    matrizR[2][2] = 1;
+
+    //calcula matriz resultante
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 4; j++){
+            for(int k = 0; k < 3; k++){
+                soma += matrizR[i][k]*pontos[k][j];
+            }
+            matrizN[i][j] = soma;
+            soma = 0.0;
+        }
+    }
+}
+
 void translacao()
 {
   int tx, ty;
@@ -118,6 +149,22 @@ void translacao()
   glutMainLoop();
 }
 
+void rotacao(){
+    int angulo;
+
+    printf("\nValor do angulo de rotacao(em graus): ");
+    scanf("%d",&angulo);
+
+    matrizRot(angulo);
+
+
+    inicializaOpenGL();
+    glutCreateWindow("Rotacao Poligono");
+    inicializaCores();
+    glutDisplayFunc(draw);
+    glutMainLoop();
+}
+
 void validaOpcao(int opcao)
 {
   system("cls");
@@ -126,6 +173,7 @@ void validaOpcao(int opcao)
       translacao();
       break;
     case 2:
+       rotacao();
       break;
     case 0:
       break;
