@@ -72,64 +72,99 @@ void draw()
 
 void matrizTranslacao(int tx, int ty)
 {
-  int matrizT[3][3], soma = 0,i,j,k;
+  int i, j, k, matrizT[3][3], soma = 0;
 
   //monta matriz de translação
-  for(i = 0; i < 3; i++){
-    for(j = 0; j < 3; j++){
-        if(i == j)
-            matrizT[i][j] = 1;
-
-        if (i > j)
-            matrizT[i][j] = 0;
+  for(i = 0; i < 3; i++)
+  {
+    for(j = 0; j < 3; j++)
+    {
+      if(i == j)
+        matrizT[i][j] = 1;
+      if (i > j)
+        matrizT[i][j] = 0;
     }
   }
-    matrizT[0][2] = tx;
-    matrizT[1][2] = ty;
-    matrizT[0][1] = 0;
-
-
+  matrizT[0][2] = tx;
+  matrizT[1][2] = ty;
+  matrizT[0][1] = 0;
 
   //calcula matriz resultante
-  for(i = 0; i < 3; i++){
-    for(j = 0; j < 4; j++){
-        for(k = 0; k < 3; k++){
-            soma += matrizT[i][k]*pontos[k][j];
-        }
-        matrizN[i][j] = soma;
-        soma = 0;
+  for(i = 0; i < 3; i++)
+  {
+    for(j = 0; j < 4; j++)
+    {
+      for(k = 0; k < 3; k++)
+        soma += matrizT[i][k] * pontos[k][j];
+      matrizN[i][j] = soma;
+      soma = 0;
     }
   }
 }
 
-void matrizRot(int angulo){
-    float matrizR[3][3];
-    float radianos, soma = 0.0;
+void matrizRot(int angulo)
+{
+  float matrizR[3][3];
+  float radianos, soma = 0.0;
 
-    radianos = (angulo * PI)/180;
+  radianos = (angulo * PI) / 180;
 
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
-            if ((i == j) && (i!=2))
-                matrizR[i][j] = cos(radianos);
-            else
-                matrizR[i][j] = 0;
-        }
+  for(int i = 0; i < 3; i++)
+  {
+    for(int j = 0; j < 3; j++)
+    {
+      if ((i == j) && (i !=2 ))
+        matrizR[i][j] = cos(radianos);
+      else
+        matrizR[i][j] = 0;
     }
-    matrizR[0][1] = -sin(radianos);
-    matrizR[1][0] = sin(radianos);
-    matrizR[2][2] = 1;
+  }
+  matrizR[0][1] = -sin(radianos);
+  matrizR[1][0] = sin(radianos);
+  matrizR[2][2] = 1;
 
-    //calcula matriz resultante
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 4; j++){
-            for(int k = 0; k < 3; k++){
-                soma += matrizR[i][k]*pontos[k][j];
-            }
-            matrizN[i][j] = soma;
-            soma = 0.0;
-        }
+  //calcula matriz resultante
+  for(int i = 0; i < 3; i++)
+  {
+    for(int j = 0; j < 4; j++)
+    {
+      for(int k = 0; k < 3; k++)
+        soma += matrizR[i][k] * pontos[k][j];
+      matrizN[i][j] = soma;
+      soma = 0.0;
     }
+  }
+}
+
+void matrizEscala(int sx, int sy)
+{
+  int i, j, k, matrizE[3][3], soma = 0;
+
+  //monta matriz de escala
+  for(i = 0; i < 3; i++)
+  {
+    for(j = 0; j < 3; j++)
+    {
+      if(i == j)
+        matrizE[i][j] = 1;
+      else
+        matrizE[i][j] = 0;
+    }
+  }
+  matrizE[0][0] = sx;
+  matrizE[1][1] = sy;
+
+  //calcula matriz resultante
+  for(i = 0; i < 3; i++)
+  {
+    for(j = 0; j < 4; j++)
+    {
+      for(k = 0; k < 3; k++)
+        soma += matrizE[i][k] * pontos[k][j];
+      matrizN[i][j] = soma;
+      soma = 0;
+    }
+  }
 }
 
 void translacao()
@@ -149,31 +184,51 @@ void translacao()
   glutMainLoop();
 }
 
-void rotacao(){
-    int angulo;
+void rotacao()
+{
+  int angulo;
 
-    printf("\nValor do angulo de rotacao(em graus): ");
-    scanf("%d",&angulo);
+  printf("\nValor do angulo de rotacao(em graus): ");
+  scanf("%d",&angulo);
 
-    matrizRot(angulo);
+  matrizRot(angulo);
+  inicializaOpenGL();
+  glutCreateWindow("Rotacao Poligono");
+  inicializaCores();
+  glutDisplayFunc(draw);
+  glutMainLoop();
+}
 
+void escala()
+{
+  int sx, sy;
 
-    inicializaOpenGL();
-    glutCreateWindow("Rotacao Poligono");
-    inicializaCores();
-    glutDisplayFunc(draw);
-    glutMainLoop();
+  printf("\nEscala em X: ");
+  scanf("%d",&sx);
+  printf("\nEscala em Y: ");
+  scanf("%d",&sy);
+
+  matrizEscala(sx, sy);
+  inicializaOpenGL();
+  glutCreateWindow("Escala Poligono");
+  inicializaCores();
+  glutDisplayFunc(draw);
+  glutMainLoop();
 }
 
 void validaOpcao(int opcao)
 {
   system("cls");
-  switch(opcao){
+  switch(opcao)
+  {
     case 1:
       translacao();
       break;
     case 2:
-       rotacao();
+      rotacao();
+      break;
+    case 3:
+      escala();
       break;
     case 0:
       break;
@@ -188,6 +243,7 @@ void showMenu()
   printf("--------------MENU--------------\n");
   printf("1 - Translacao\n");
   printf("2 - Rotacao\n");
+  printf("3 - Escala\n");
   printf("0 - Sair\n");
   printf("Opcao: ");
   scanf("%d",&op);
@@ -197,8 +253,8 @@ void showMenu()
 void definePontos()
 {
   pontos[0][0] = 50; pontos[0][1] = 100; pontos[0][2] = 100; pontos[0][3] = 50;
-  pontos[1][0] = 50; pontos[1][1] = 50; pontos[1][2] = 100; pontos[1][3] = 100;
-  pontos[2][0] = 1;   pontos[2][1] = 1;   pontos[2][2] = 1;   pontos[2][3] = 1;
+  pontos[1][0] = 50; pontos[1][1] = 50;  pontos[1][2] = 100; pontos[1][3] = 100;
+  pontos[2][0] = 1;  pontos[2][1] = 1;   pontos[2][2] = 1;   pontos[2][3] = 1;
 }
 int main(int argc,char **argv)
 {
