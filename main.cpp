@@ -58,18 +58,33 @@ void DDA(int x0,int y0,int x1,int y1)
 void draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_POINTS);
 
-    for(int i = 0; i < NUM_PONTOS; i++)
-    {
-        if((i + 1) == NUM_PONTOS)
-            DDA(matrizN[0][i], matrizN[1][i],
-                    matrizN[0][0], matrizN[1][0]);
-        else
-            DDA(matrizN[0][i], matrizN[1][i],
-                    matrizN[0][i + 1], matrizN[1][i + 1]);
-    }
+    glBegin(GL_POINTS);
+        glColor3f(0.0,0.0,0.0);
+        for(int i = 0; i < NUM_PONTOS; i++)
+        {
+            if((i + 1) == NUM_PONTOS)
+                DDA(pontos[0][i], pontos[1][i],
+                        pontos[0][0], pontos[1][0]);
+            else
+                DDA(pontos[0][i], pontos[1][i],
+                        pontos[0][i + 1], pontos[1][i + 1]);
+        }
     glEnd();
+
+    glBegin(GL_POINTS);
+        glColor3f(1.0,0.0,0.0);
+        for(int i = 0; i < NUM_PONTOS; i++)
+        {
+            if((i + 1) == NUM_PONTOS)
+                DDA(matrizN[0][i], matrizN[1][i],
+                        matrizN[0][0], matrizN[1][0]);
+            else
+                DDA(matrizN[0][i], matrizN[1][i],
+                        matrizN[0][i + 1], matrizN[1][i + 1]);
+        }
+    glEnd();
+
     glFlush();
 }
 
