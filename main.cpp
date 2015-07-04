@@ -12,7 +12,7 @@ void inicializaOpenGL()
 {
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); //Define o modo inicial de apresentação
     glutInitWindowPosition(50,50); // Define a posição inicial da tela a ser apresentada
-    glutInitWindowSize(600, 600); // Define o tamanho da tela a ser apresentada
+    glutInitWindowSize(800, 600); // Define o tamanho da tela a ser apresentada
 }
 
 void inicializaCores()
@@ -30,9 +30,9 @@ int round1(double number)
 
 void DDA(int x0,int y0,int x1,int y1)
 {
-    x0 += 150;
+    x0 += 200;
     y0 += 150;
-    x1 += 150;
+    x1 += 200;
     y1 += 150;
     int dy = y1 - y0;
     int dx = x1 - x0;
@@ -168,7 +168,7 @@ float** getMatrizRot(int angulo) {
     {
         for(int j = 0; j < 3; j++)
         {
-            if ((i == j) && (i !=2 ))
+            if ((i == j) && (i != 2))
                 matrizR[i][j] = cos(radianos);
             else
                 matrizR[i][j] = 0;
@@ -455,7 +455,7 @@ void showMenu()
 
 void definePontos()
 {
-    pontos[0][0] = 50; pontos[0][1] = 100; pontos[0][2] = 200; pontos[0][3] = 50;
+    pontos[0][0] = 0;  pontos[0][1] = 50;  pontos[0][2] = 150; pontos[0][3] = 0;
     pontos[1][0] = 50; pontos[1][1] = 50;  pontos[1][2] = 100; pontos[1][3] = 100;
     pontos[2][0] = 1;  pontos[2][1] = 1;   pontos[2][2] = 1;   pontos[2][3] = 1;
 }
